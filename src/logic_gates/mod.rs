@@ -5,3 +5,8 @@ mod xor;
 mod mux;
 mod dmux;
 mod not16;
+mod and16;
+mod or16;
+mod mux16;
+mod or8way;
+mod dmux4way;
