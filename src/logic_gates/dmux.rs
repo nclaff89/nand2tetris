@@ -13,3 +13,16 @@ impl Dmux {
         }
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_dmux() {
+       assert_eq!(Dmux::dmux(true, true), (false, true));
+       assert_eq!(Dmux::dmux(true, false), (true, false));
+       assert_eq!(Dmux::dmux(false, false), (false, false));
+       assert_eq!(Dmux::dmux(false, true), (false, false));
+    }
+}
