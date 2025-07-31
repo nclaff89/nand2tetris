@@ -1,19 +1,20 @@
+use crate::logic_gates::or::Or;
+
 /**
  * 8-way Or gate:
  * out = in[0] Or in[1] Or ... Or in[7]
  */
 struct Or8Way;
 
-// todo refactor to only use things already created.
 impl Or8Way {
     fn or8way(input: [bool; 8]) -> bool {
-        let mut output = false;
-
-        for i in 0..input.len() {
-            output |= input[i];
-        }
-
-        output
+        let or_out_1 = Or::or(input[0], input[1]);
+        let or_out_2 = Or::or(or_out_1, input[2]);
+        let or_out_3 = Or::or(or_out_2, input[3]);
+        let or_out_4 = Or::or(or_out_3, input[4]);
+        let or_out_5 = Or::or(or_out_4, input[5]);
+        let or_out_6 = Or::or(or_out_5, input[6]);
+        Or::or(or_out_6, input[7])
     }
 }
 
