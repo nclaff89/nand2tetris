@@ -1,3 +1,5 @@
+use crate::logic_gates::and::And;
+
 /**
  * 16-bit And gate:
  * for i = 0, ..., 15:
@@ -7,13 +9,24 @@ struct And16;
 
 impl And16 {
     fn and16(a: [bool; 16], b: [bool; 16]) -> [bool; 16] {
-        let mut output = [false; 16];
-
-        for i in 0..16 {
-            output[i] = a[i] && b[i];
-        }
-
-        output
+        [
+            And::and(a[0], b[0]),
+            And::and(a[1], b[1]),
+            And::and(a[2], b[2]),
+            And::and(a[3], b[3]),
+            And::and(a[4], b[4]),
+            And::and(a[5], b[5]),
+            And::and(a[6], b[6]),
+            And::and(a[7], b[7]),
+            And::and(a[8], b[8]),
+            And::and(a[9], b[9]),
+            And::and(a[10], b[10]),
+            And::and(a[11], b[11]),
+            And::and(a[12], b[12]),
+            And::and(a[13], b[13]),
+            And::and(a[14], b[14]),
+            And::and(a[15], b[15]),
+        ]
     }
 }
 

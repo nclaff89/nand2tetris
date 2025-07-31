@@ -1,3 +1,7 @@
+use crate::logic_gates::and::And;
+use crate::logic_gates::not::Not;
+use crate::logic_gates::or::Or;
+
 /**
  * Multiplexor:
  * if (sel = 0) out = a else out = b
@@ -6,10 +10,10 @@ pub struct Mux;
 
 impl Mux {
     pub fn mux(a: bool, b: bool, select: bool) -> bool {
-        match select {
-            true => b,
-            false => a,
-        }
+        let not_select = Not::not(select);
+        let a_and_not_select = And::and(a, not_select);
+        let b_and_select = And::and(b, select);
+        Or::or(a_and_not_select, b_and_select)
     }
 }
 

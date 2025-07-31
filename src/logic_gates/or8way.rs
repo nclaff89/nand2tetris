@@ -4,6 +4,7 @@
  */
 struct Or8Way;
 
+// todo refactor to only use things already created.
 impl Or8Way {
     fn or8way(input: [bool; 8]) -> bool {
         let mut output = false;

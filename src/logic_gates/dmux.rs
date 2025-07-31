@@ -1,16 +1,17 @@
+use crate::logic_gates::and::And;
+use crate::logic_gates::not::Not;
+
 /**
  * Demultiplexor:
  * [a, b] = [in, 0] if sel = 0
  *          [0, in] if sel = 1
  */
-struct Dmux;
+pub struct Dmux;
 
 impl Dmux {
-    fn dmux(input: bool, select: bool) -> (bool, bool) {
-        match select {
-            false => (input, false),
-            true  => (false, input)
-        }
+    pub(crate) fn dmux(input: bool, select: bool) -> (bool, bool) {
+        let not_select = Not::not(select);
+        (And::and(input, not_select), And::and(input, select))
     }
 }
 

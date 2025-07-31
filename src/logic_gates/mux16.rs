@@ -1,3 +1,5 @@
+use crate::logic_gates::mux::Mux;
+
 /**
  * 16-bit multiplexor:
  * for i = 0, ..., 15:
@@ -7,10 +9,24 @@ struct Mux16;
 
 impl Mux16 {
     fn mux16(a: [bool; 16], b: [bool; 16], select: bool) -> [bool; 16] {
-        match select {
-            true => b,
-            false => a,
-        }
+        [
+            Mux::mux(a[0], b[0], select),
+            Mux::mux(a[1], b[1], select),
+            Mux::mux(a[2], b[2], select),
+            Mux::mux(a[3], b[3], select),
+            Mux::mux(a[4], b[4], select),
+            Mux::mux(a[5], b[5], select),
+            Mux::mux(a[6], b[6], select),
+            Mux::mux(a[7], b[7], select),
+            Mux::mux(a[8], b[8], select),
+            Mux::mux(a[9], b[9], select),
+            Mux::mux(a[10], b[10], select),
+            Mux::mux(a[11], b[11], select),
+            Mux::mux(a[12], b[12], select),
+            Mux::mux(a[13], b[13], select),
+            Mux::mux(a[14], b[14], select),
+            Mux::mux(a[15], b[15], select),
+        ]
     }
 }
 

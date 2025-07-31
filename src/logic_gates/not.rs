@@ -18,8 +18,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_not() {
+    fn test_not_false() {
         assert_eq!(Not::not(false), true);
+    }
+    #[test]
+    fn test_not_true() {
         assert_eq!(Not::not(true), false);
     }
 }

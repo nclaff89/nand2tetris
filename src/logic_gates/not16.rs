@@ -1,3 +1,5 @@
+use crate::logic_gates::not::Not;
+
 /**
  * 16-bit Not gate:
  * for i = 0, ..., 15:
@@ -7,11 +9,24 @@ pub struct Not16;
 
 impl Not16 {
     pub fn not16(input: [bool; 16]) -> [bool; 16] {
-        let mut output: [bool; 16] = Default::default();
-        for i in 0..input.len() {
-            output[i] = !input[i];
-        }
-        output
+        [
+            Not::not(input[0]),
+            Not::not(input[1]),
+            Not::not(input[2]),
+            Not::not(input[3]),
+            Not::not(input[4]),
+            Not::not(input[5]),
+            Not::not(input[6]),
+            Not::not(input[7]),
+            Not::not(input[8]),
+            Not::not(input[9]),
+            Not::not(input[10]),
+            Not::not(input[11]),
+            Not::not(input[12]),
+            Not::not(input[13]),
+            Not::not(input[14]),
+            Not::not(input[15]),
+        ]
     }
 }
 

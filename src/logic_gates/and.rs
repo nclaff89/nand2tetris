@@ -18,10 +18,22 @@ impl And {
 mod test_and {
     use super::*;
     #[test]
-    fn test_and() {
+    fn test_and_a_is_true_and_b_is_true() {
         assert_eq!(And::and(true, true), true);
+    }
+
+    #[test]
+    fn test_and_a_is_true_and_b_is_false() {
         assert_eq!(And::and(true, false), false);
+    }
+
+    #[test]
+    fn test_and_a_is_false_and_b_is_true() {
         assert_eq!(And::and(false, true), false);
+    }
+
+    #[test]
+    fn test_and_a_is_false_and_b_is_false() {
         assert_eq!(And::and(false, false), false);
     }
 }
