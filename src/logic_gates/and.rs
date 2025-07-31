@@ -1,3 +1,6 @@
+use crate::logic_gates::nand::Nand;
+use crate::logic_gates::not::Not;
+
 /**
  * And gate:
  * if (a and b) out = 1, else out = 0
@@ -6,7 +9,8 @@ pub struct And;
 
 impl And {
     pub fn and(a: bool, b: bool) -> bool {
-        a && b
+        let nand_out = Nand::nand(a, b);
+        Not::not(nand_out)
     }
 }
 

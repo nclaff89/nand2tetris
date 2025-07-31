@@ -10,3 +10,4 @@ mod or16;
 mod mux16;
 mod or8way;
 mod dmux4way;
+mod nand;
