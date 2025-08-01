@@ -9,7 +9,7 @@ use crate::logic_gates::dmux::Dmux;
  */
 pub struct Dmux4Way;
 impl Dmux4Way {
-    fn dmux4way(input: bool, select: [bool; 2]) -> [bool; 4] {
+    pub fn dmux4way(input: bool, select: [bool; 2]) -> [bool; 4] {
         let (dmux_0, dmux_1) = Dmux::dmux(input, select[0]); //most significant bit
         let (a, b) = Dmux::dmux(dmux_0, select[1]); // least significant bit
         let (c, d) = Dmux::dmux(dmux_1, select[1]); // least significant bit
