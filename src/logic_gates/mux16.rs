@@ -5,10 +5,10 @@ use crate::logic_gates::mux::Mux;
  * for i = 0, ..., 15:
  * if (sel = 0) out[i] = a[i], else out[i] = b[i]
  */
-struct Mux16;
+pub struct Mux16;
 
 impl Mux16 {
-    fn mux16(a: [bool; 16], b: [bool; 16], select: bool) -> [bool; 16] {
+    pub fn mux16(a: [bool; 16], b: [bool; 16], select: bool) -> [bool; 16] {
         [
             Mux::mux(a[0], b[0], select),
             Mux::mux(a[1], b[1], select),

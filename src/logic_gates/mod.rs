@@ -11,3 +11,6 @@ mod mux16;
 mod or8way;
 mod dmux4way;
 mod nand;
+mod mux4way16;
+mod mux8way16;
+mod dmux8way;
