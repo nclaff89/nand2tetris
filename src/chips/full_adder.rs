@@ -1,6 +1,9 @@
 use crate::chips::half_adder::HalfAdder;
 use crate::logic_gates::or::Or;
 
+/**
+ * Computes the sum of three bits.
+ */
 pub struct FullAdder;
 
 impl FullAdder {

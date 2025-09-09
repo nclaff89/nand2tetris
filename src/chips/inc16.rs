@@ -1,5 +1,10 @@
 use crate::chips::add16::Add16;
 
+/**
+ * 16-bit incrementer:
+ * out = in + 1
+ */
+
 pub struct Inc16;
 
 impl Inc16 {

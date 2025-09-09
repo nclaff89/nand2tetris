@@ -1,6 +1,10 @@
 use crate::chips::full_adder::FullAdder;
 use crate::chips::half_adder::HalfAdder;
 
+/**
+ * 16-bit adder: Adds two 16-bit two's complement values.
+ * The most significant carry bit is ignored.
+ */
 pub struct Add16 {
 
 }

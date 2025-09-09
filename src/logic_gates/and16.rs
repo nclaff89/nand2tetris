@@ -5,10 +5,10 @@ use crate::logic_gates::and::And;
  * for i = 0, ..., 15:
  * out[i] = a[i] And b[i]
  */
-struct And16;
+pub struct And16;
 
 impl And16 {
-    fn and16(a: [bool; 16], b: [bool; 16]) -> [bool; 16] {
+    pub fn and16(a: [bool; 16], b: [bool; 16]) -> [bool; 16] {
         [
             And::and(a[0], b[0]),
             And::and(a[1], b[1]),

@@ -1,6 +1,9 @@
 use crate::logic_gates::and::And;
 use crate::logic_gates::xor::Xor;
 
+/**
+ * Computes the sum of two bits.
+ */
 pub struct HalfAdder;
 
 impl HalfAdder {

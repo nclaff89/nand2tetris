@@ -4,10 +4,10 @@ use crate::logic_gates::or::Or;
  * 8-way Or gate:
  * out = in[0] Or in[1] Or ... Or in[7]
  */
-struct Or8Way;
+pub struct Or8Way;
 
 impl Or8Way {
-    fn or8way(input: [bool; 8]) -> bool {
+    pub fn or8way(input: [bool; 8]) -> bool {
         let or_out_1 = Or::or(input[0], input[1]);
         let or_out_2 = Or::or(or_out_1, input[2]);
         let or_out_3 = Or::or(or_out_2, input[3]);
