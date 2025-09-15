@@ -92,17 +92,26 @@ pub struct ALUOutput {
 
 #[cfg(test)]
 mod tests {
+    use crate::chips::inc16::Inc16;
+    use crate::logic_gates::or16::Or16;
     use super::*;
 
+    /** TEST INPUTS SET 1 X AND Y **/
     // x = 0
-    const x1: [bool; 16] = [false; 16];
+    const X_IS_ZERO: [bool; 16] = [false; 16];
 
     // y = -1
-    const y1: [bool; 16] = [true; 16];
+    const Y_IS_NEGATIVE_ONE: [bool; 16] = [true; 16];
+
+    /** TEST INPUTS SET 2 X AND Y **/
+    // set x %B000000000010001,  // x = 17
+    const X_IS_SEVENTEEN: [bool; 16] = [false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, true];
+
+    // set y %B000000000000011;  // y =  3
+    const Y_IS_THREE: [bool; 16] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true];
 
     #[test]
-    fn test_set1_compute_0() {
-
+    fn test_alu_set1_compute_0() {
         let zx = true; // if (zx == 1) sets x = 0
         let nx = false; // if (nx == 1) sets x = !x
         let zy = true; // if (zy == 1) sets y = 0
@@ -116,8 +125,8 @@ mod tests {
         let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
 
         let alu_output = ALU::alu(
-            x1,
-            y1,
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
             zx,
             nx,
             zy,
@@ -133,8 +142,7 @@ mod tests {
     }
 
     #[test]
-    fn test_set1_compute_1() {
-
+    fn test_alu_set1_compute_1() {
         let zx = true; // if (zx == 1) sets x = 0        
         let nx = true; // if (nx == 1) sets x = !x       
         let zy = true; // if (zy == 1) sets y = 0        
@@ -147,8 +155,8 @@ mod tests {
         let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
 
         let alu_output = ALU::alu(
-            x1,
-            y1,
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
             zx,
             nx,
             zy,
@@ -163,8 +171,7 @@ mod tests {
     }
 
     #[test]
-    fn test_set1_compute_negative_1() {
-
+    fn test_alu_set1_compute_negative_1() {
         let zx = true; // if (zx == 1) sets x = 0        
         let nx = true; // if (nx == 1) sets x = !x       
         let zy = true; // if (zy == 1) sets y = 0        
@@ -177,8 +184,8 @@ mod tests {
         let expected_ng = true;  // if (out < 0)  ng = 1, else ng = 0
 
         let alu_output = ALU::alu(
-            x1,
-            y1,
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
             zx,
             nx,
             zy,
@@ -193,7 +200,7 @@ mod tests {
     }
 
     #[test]
-    fn test_alu_compute_x(){
+    fn test_alu_set1_compute_x(){
         let zx = false; // if (zx == 1) sets x = 0        
         let nx = false; // if (nx == 1) sets x = !x       
         let zy = true; // if (zy == 1) sets y = 0        
@@ -201,13 +208,13 @@ mod tests {
         let f = false;  // if (f == 1)  sets out = x + y  
         let no = false; // if (no == 1) sets out = !out   
 
-        let expected_out = x1;
+        let expected_out = X_IS_ZERO;
         let expected_zr = true; // if (out == 0) zr = 1, else zr = 0
         let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
 
         let alu_output = ALU::alu(
-            x1,
-            y1,
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
             zx,
             nx,
             zy,
@@ -222,7 +229,7 @@ mod tests {
     }
 
     #[test]
-    fn test_alu_compute_y(){
+    fn test_alu_set1_compute_y(){
         let zx = true; // if (zx == 1) sets x = 0
         let nx = true; // if (nx == 1) sets x = !x
         let zy = false; // if (zy == 1) sets y = 0
@@ -230,13 +237,13 @@ mod tests {
         let f = false;  // if (f == 1)  sets out = x + y
         let no = false; // if (no == 1) sets out = !out
 
-        let expected_out = y1;
+        let expected_out = Y_IS_NEGATIVE_ONE;
         let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
         let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
 
         let alu_output = ALU::alu(
-            x1,
-            y1,
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
             zx,
             nx,
             zy,
@@ -252,7 +259,7 @@ mod tests {
     }
 
     #[test]
-    fn test_alu_compute_not_x() {
+    fn test_alu_set1_compute_not_x() {
         let zx = false; // if (zx == 1) sets x = 0
         let nx = false; // if (nx == 1) sets x = !x
         let zy = true; // if (zy == 1) sets y = 0
@@ -260,13 +267,13 @@ mod tests {
         let f = false;  // if (f == 1)  sets out = x + y
         let no = true; // if (no == 1) sets out = !out
 
-        let expected_out = Not16::not16(x1);
+        let expected_out = Not16::not16(X_IS_ZERO);
         let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
         let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
 
         let alu_output = ALU::alu(
-            x1,
-            y1,
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
             zx,
             nx,
             zy,
@@ -282,16 +289,7 @@ mod tests {
     }
 
     #[test]
-    fn test_alu_compute_not_y() {
-        // // Compute !y
-        // set zx 1,
-        // set nx 1,
-        // set zy 0,
-        // set ny 0,
-        // set f  0,
-        // set no 1,
-        // eval,
-        // output;
+    fn test_alu_set1_compute_not_y() {
         let zx = true; // if (zx == 1) sets x = 0
         let nx = true; // if (nx == 1) sets x = !x
         let zy = false; // if (zy == 1) sets y = 0
@@ -299,13 +297,13 @@ mod tests {
         let f = false;  // if (f == 1)  sets out = x + y
         let no = true; // if (no == 1) sets out = !out
 
-        let expected_out = Not16::not16(y1);
+        let expected_out = Not16::not16(Y_IS_NEGATIVE_ONE);
         let expected_zr = true; // if (out == 0) zr = 1, else zr = 0
         let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
 
         let alu_output = ALU::alu(
-            x1,
-            y1,
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
             zx,
             nx,
             zy,
@@ -320,298 +318,883 @@ mod tests {
 
     }
 
+    #[test]
+    fn test_alu_set1_compute_negative_x() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        // negative 0 should just be 0
+        let expected_out = [false; 16];
+        let expected_zr = true; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set1_compute_negative_y() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        // negative -1 should be 1
+        let expected_out = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set1_compute_x_plus_1() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        let expected_out = Inc16::inc16(X_IS_ZERO);
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set1_compute_y_plus_1() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        let expected_out = Inc16::inc16(Y_IS_NEGATIVE_ONE);
+        let expected_zr = true; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set1_compute_x_minus_1() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+        let expected_out = [true; 16];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set1_compute_y_minus_1() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+        let expected_out = [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set1_compute_x_plus_y() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+        let expected_out = Y_IS_NEGATIVE_ONE;
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set1_compute_x_minus_y() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        // 0 - (-1) =1
+        let expected_out = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set1_compute_y_minus_x() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        // -1 - 0 = -1
+        let expected_out = Y_IS_NEGATIVE_ONE;
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set1_compute_x_and_y() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = false;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
 
 
-    // // Compute -x
-    // set zx 0,
-    // set nx 0,
-    // set zy 1,
-    // set ny 1,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute -y
-    // set zx 1,
-    // set nx 1,
-    // set zy 0,
-    // set ny 0,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute x + 1
-    // set zx 0,
-    // set nx 1,
-    // set zy 1,
-    // set ny 1,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute y + 1
-    // set zx 1,
-    // set nx 1,
-    // set zy 0,
-    // set ny 1,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute x - 1
-    // set zx 0,
-    // set nx 0,
-    // set zy 1,
-    // set ny 1,
-    // set f  1,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute y - 1
-    // set zx 1,
-    // set nx 1,
-    // set zy 0,
-    // set ny 0,
-    // set f  1,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute x + y
-    // set zx 0,
-    // set nx 0,
-    // set zy 0,
-    // set ny 0,
-    // set f  1,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute x - y
-    // set zx 0,
-    // set nx 1,
-    // set zy 0,
-    // set ny 0,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute y - x
-    // set zx 0,
-    // set nx 0,
-    // set zy 0,
-    // set ny 1,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute x & y
-    // set zx 0,
-    // set nx 0,
-    // set zy 0,
-    // set ny 0,
-    // set f  0,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute x | y
-    // set zx 0,
-    // set nx 1,
-    // set zy 0,
-    // set ny 1,
-    // set f  0,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // set x %B000000000010001,  // x = 17
-    // set y %B000000000000011;  // y =  3
-    //
-    // // Compute 0
-    // set zx 1,
-    // set nx 0,
-    // set zy 1,
-    // set ny 0,
-    // set f  1,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute 1
-    // set zx 1,
-    // set nx 1,
-    // set zy 1,
-    // set ny 1,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute -1
-    // set zx 1,
-    // set nx 1,
-    // set zy 1,
-    // set ny 0,
-    // set f  1,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute x
-    // set zx 0,
-    // set nx 0,
-    // set zy 1,
-    // set ny 1,
-    // set f  0,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute y
-    // set zx 1,
-    // set nx 1,
-    // set zy 0,
-    // set ny 0,
-    // set f  0,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute !x
-    // set zx 0,
-    // set nx 0,
-    // set zy 1,
-    // set ny 1,
-    // set f  0,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute !y
-    // set zx 1,
-    // set nx 1,
-    // set zy 0,
-    // set ny 0,
-    // set f  0,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute -x
-    // set zx 0,
-    // set nx 0,
-    // set zy 1,
-    // set ny 1,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute -y
-    // set zx 1,
-    // set nx 1,
-    // set zy 0,
-    // set ny 0,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute x + 1
-    // set zx 0,
-    // set nx 1,
-    // set zy 1,
-    // set ny 1,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute y + 1
-    // set zx 1,
-    // set nx 1,
-    // set zy 0,
-    // set ny 1,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute x - 1
-    // set zx 0,
-    // set nx 0,
-    // set zy 1,
-    // set ny 1,
-    // set f  1,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute y - 1
-    // set zx 1,
-    // set nx 1,
-    // set zy 0,
-    // set ny 0,
-    // set f  1,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute x + y
-    // set zx 0,
-    // set nx 0,
-    // set zy 0,
-    // set ny 0,
-    // set f  1,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute x - y
-    // set zx 0,
-    // set nx 1,
-    // set zy 0,
-    // set ny 0,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute y - x
-    // set zx 0,
-    // set nx 0,
-    // set zy 0,
-    // set ny 1,
-    // set f  1,
-    // set no 1,
-    // eval,
-    // output;
-    //
-    // // Compute x & y
-    // set zx 0,
-    // set nx 0,
-    // set zy 0,
-    // set ny 0,
-    // set f  0,
-    // set no 0,
-    // eval,
-    // output;
-    //
-    // // Compute x | y
-    // set zx 0,
-    // set nx 1,
-    // set zy 0,
-    // set ny 1,
-    // set f  0,
-    // set no 1,
-    // eval,
-    // output;
+        let expected_out = And16::and16(X_IS_ZERO, Y_IS_NEGATIVE_ONE);
+        let expected_zr = true; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set1_compute_x_or_y() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = false;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        let expected_out = Or16::or16(X_IS_ZERO, Y_IS_NEGATIVE_ONE);
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_ZERO,
+            Y_IS_NEGATIVE_ONE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set2_compute_0() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+
+        let expected_out = [false; 16];
+        let expected_zr = true; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_1() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        let expected_out = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set2_compute_negative_1() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+        let expected_out = [true; 16];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true;  // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set2_compute_x() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = false;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+        let expected_out = X_IS_SEVENTEEN;
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set2_compute_y() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = false;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+        let expected_out = Y_IS_THREE;
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set2_compute_not_x() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = false;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        let expected_out = Not16::not16(X_IS_SEVENTEEN);
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_not_y() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = false;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        let expected_out = Not16::not16(Y_IS_THREE);
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_negative_x() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        // 1111 1111 1110 1111
+        let expected_out = [true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_negative_y() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        // 0000 0000 0000 0011 binary 3
+
+        // 1111 1111 1111 1100 flip all the bits
+        //+0000 0000 0000 0001 add 1
+        // =
+        // 1111 1111 1111 1101 binary -3
+        let expected_out = [true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_x_plus_1() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        let expected_out = Inc16::inc16(X_IS_SEVENTEEN);
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_y_plus_1() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        let expected_out = Inc16::inc16(Y_IS_THREE);
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set2_compute_x_minus_1() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = true; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+        let expected_out = [false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_y_minus_1() {
+        let zx = true; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+        let expected_out = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set2_compute_x_plus_y() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+        let expected_out = [false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
+
+    #[test]
+    fn test_alu_set2_compute_x_minus_y() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        // 17 - 3 = 14
+        let expected_out = [false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_y_minus_x() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = true;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        //  3 - 17 = -14
+        // +14
+        // 0000 0000 0000 1110
+
+        // flip bits and add 1 to negate
+        // 1111 1111 1111 0001
+        //+0000 0000 0000 0001
+        //=1111 1111 1111 0010
+        let expected_out = [true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, false];
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = true; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_x_and_y() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = false; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = false; // if (ny == 1) sets y = !y
+        let f = false;  // if (f == 1)  sets out = x + y
+        let no = false; // if (no == 1) sets out = !out
+
+
+        let expected_out = And16::and16(X_IS_SEVENTEEN, Y_IS_THREE);
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+
+    }
+
+    #[test]
+    fn test_alu_set2_compute_x_or_y() {
+        let zx = false; // if (zx == 1) sets x = 0
+        let nx = true; // if (nx == 1) sets x = !x
+        let zy = false; // if (zy == 1) sets y = 0
+        let ny = true; // if (ny == 1) sets y = !y
+        let f = false;  // if (f == 1)  sets out = x + y
+        let no = true; // if (no == 1) sets out = !out
+
+        let expected_out = Or16::or16(X_IS_SEVENTEEN, Y_IS_THREE);
+        let expected_zr = false; // if (out == 0) zr = 1, else zr = 0
+        let expected_ng = false; // if (out < 0)  ng = 1, else ng = 0
+
+        let alu_output = ALU::alu(
+            X_IS_SEVENTEEN,
+            Y_IS_THREE,
+            zx,
+            nx,
+            zy,
+            ny,
+            f,
+            no
+        );
+
+        assert_eq!(alu_output.out, expected_out);
+        assert_eq!(alu_output.zr, expected_zr);
+        assert_eq!(alu_output.ng, expected_ng);
+    }
 }

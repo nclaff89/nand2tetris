@@ -8,7 +8,7 @@ use crate::logic_gates::or::Or;
 pub struct Or16;
 
 impl Or16 {
-    fn or16(a: [bool; 16], b: [bool; 16]) -> [bool; 16] {
+    pub fn or16(a: [bool; 16], b: [bool; 16]) -> [bool; 16] {
         [
             Or::or(a[0], b[0]),
             Or::or(a[1], b[1]),
